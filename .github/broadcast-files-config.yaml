@@ -10,7 +10,7 @@ common_files:
   repos_to_ignore: >
     qubership-core-build
 obsoleted_files_cleanup:
-  patterns_to_remove: .github/workflows/pr-assigner.yaml\
+  patterns_to_remove: .github/workflows/pr-assigner.yaml
   bot_branch_name: broadcast-remove-pr-assigner-yaml
   commit_message: |
     feat(ci): removed workflow-templates/pr-assigner.yaml.
