@@ -1,7 +1,11 @@
 common_files:
-  bot_branch_name: broadcast-common-files
+  bot_branch_name: broadcast-common-files-1
   topics_to_include: myqbertopic
   patterns_to_include: >
     .gitattributes, .editorconfig , README.md
   destination: .
-  commit_message: 'chore: update of common files'
+  commit_message: |
+    chore: update of common files
+    Test string to add into PRs body
+  repos_to_ignore: >
+    qubership-core-build
