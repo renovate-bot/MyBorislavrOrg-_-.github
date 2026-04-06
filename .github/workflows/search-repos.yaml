@@ -64,20 +64,28 @@ jobs:
             exit 0
           fi
           
-#          echo "🚀 Начинаем добавление топика '$TOPIC'..."
-#          
-#          while IFS= read -r repo; do
-#            echo "Обработка $repo ... "
-#            echo "############### Добавляем топик"
-#            echo "gh repo edit \"$repo\" --add-topic \"$TOPIC\""
-#            if gh repo edit "$repo" --add-topic "$TOPIC" >/dev/null 2>&1; then
-#              echo "✅ топик добавлен"
-#            else
-#              echo "❌ ошибка"
-#            fi
-#          done < repos_without_file.txt
+          echo "🚀 Начинаем добавление топика '$TOPIC'..."
           
-#          echo "🎉 Готово! Топик '$TOPIC' добавлен во все нужные репозитории."
+          while IFS= read -r repo; do
+            echo "Обработка $repo ... "
+            # Проверяем, есть ли уже такой топик
+            CURRENT_TOPICS=$(gh repo view "$repo" --json repositoryTopics -q '.repositoryTopics[].name' 2>/dev/null || echo "")
+
+            if echo "$CURRENT_TOPICS" | grep -qw "$TOPIC"; then
+              echo "уже имеет топик"
+              continue
+            fi
+
+            echo "############### Добавляем топик"
+            echo "gh repo edit \"$repo\" --add-topic \"$TOPIC\""
+            if gh repo edit "$repo" --add-topic "$TOPIC" >/dev/null 2>&1; then
+              echo "✅ топик добавлен"
+            else
+              echo "❌ ошибка"
+            fi
+          done < repos_without_file.txt
           
-#          # Очистка временных файлов
-#          rm -f all_repos.txt repos_with_file.txt repos_without_file.txt
+          echo "🎉 Готово! Топик '$TOPIC' добавлен во все нужные репозитории."
+          
+          # Очистка временных файлов
+          rm -f all_repos.txt repos_with_file.txt repos_without_file.txt
