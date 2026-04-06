@@ -68,6 +68,7 @@ jobs:
             # Проверяем, есть ли уже такой топик
             echo "############### Проверяем, есть ли уже такой топик"
             CURRENT_TOPICS=$(gh repo view "$repo" --json topics -q '.topics | join(" ")' 2>/dev/null || echo "")
+            echo "Topics: ${CURRENT_TOPICS}"
           
             if echo "$CURRENT_TOPICS" | grep -qw "$TOPIC"; then
               echo "уже имеет топик"
@@ -76,9 +77,9 @@ jobs:
           
             echo "############### Добавляем топик"
             echo "gh repo edit \"$repo\" --add-topic \"$TOPIC\""
-            gh repo edit "$repo" --add-topic "$TOPIC"
-            echo "=========== gh repo edit ====================="
-            if [[ $? > 0 ]]; then 
+            res=$(gh repo edit "$repo" --add-topic "$TOPIC")
+            echo "=========== gh repo edit: ${res} ====================="
+            if [[ ${res} == 0 ]]; then 
               echo "✅ топик добавлен"
             else
               echo "❌ ошибка"
